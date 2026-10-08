@@ -1,0 +1,177 @@
+.paper {
+  --paper-bg: #ffffff;
+  --paper-ink: #0b1220;
+  --paper-dim: #475569;
+  --paper-rule: #e2e8f0;
+  --paper-code-bg: #f6f8fb;
+  max-width: 44rem;
+  margin-inline: auto;
+  padding: 2.5rem 3rem;
+  color: var(--paper-ink);
+  background: var(--paper-bg);
+  border-radius: 0;
+  box-shadow: none;
+  font-size: 17px;
+  line-height: 2;
+  overflow-wrap: anywhere;
+}
+
+.paper[data-paper="warm"] {
+  --paper-bg: #fbf7ef;
+  --paper-ink: #2b2418;
+  --paper-dim: #6b5e48;
+  --paper-rule: #e8dfcc;
+  --paper-code-bg: #f4eedf;
+}
+
+.paper[data-paper="dark"] {
+  --paper-bg: #111827;
+  --paper-ink: #e5e7eb;
+  --paper-dim: #9ca3af;
+  --paper-rule: #243044;
+  --paper-code-bg: #0b1220;
+}
+
+.paper :where(h1, h2, h3, h4) {
+  margin-block: 1.25em 0.5em;
+  color: var(--paper-ink);
+  line-height: 1.35;
+  font-weight: 750;
+  scroll-margin-top: 5rem;
+}
+
+.paper h1 { font-size: clamp(1.65rem, 4vw, 2.25rem); }
+.paper h2 { font-size: 1.65rem; }
+.paper h3 { font-size: 1.3rem; }
+.paper p { margin-block: 1em; }
+.paper a { color: var(--primary-strong); text-decoration: underline; text-underline-offset: 0.18em; }
+.paper :where(ul, ol) { padding-inline-start: 1.4em; margin-block: 1em; }
+.paper li::marker { color: var(--primary); }
+.paper blockquote {
+  margin-block: 1.25em;
+  padding: 0.65rem 1rem;
+  border-inline-start: 3px solid var(--primary);
+  border-radius: 0;
+  color: var(--paper-dim);
+  background: transparent;
+}
+.paper hr { border: 0; border-block-start: 1px solid var(--paper-rule); margin-block: 2em; }
+.paper img { max-width: 100%; height: auto; border-radius: var(--radius-md); }
+.paper input[type="checkbox"] { accent-color: var(--primary); margin-inline-end: 0.45em; }
+.paper .table-wrap { max-width: 100%; overflow-x: auto; margin-block: 1.5em; }
+.paper table { width: 100%; border-collapse: collapse; font-size: 0.92em; }
+.paper th, .paper td { border-block-end: 1px solid var(--paper-rule); padding: 0.55em 0.7em; text-align: start; vertical-align: top; }
+.paper th { background: transparent; font-weight: 700; }
+.paper :where(code, pre) { font-family: var(--font-mono), ui-monospace, monospace; }
+.paper :where(.katex, .katex-display) { direction: ltr; unicode-bidi: isolate; }
+.paper .katex-display { overflow-x: auto; overflow-y: hidden; padding-block: .25em; text-align: center; }
+.paper .katex-display > .katex { max-width: 100%; }
+.paper :not(pre) > code {
+  direction: ltr;
+  unicode-bidi: isolate;
+  padding: 0.14em 0.38em;
+  color: var(--paper-ink);
+  background: var(--paper-code-bg);
+  border-radius: 5px;
+  font-size: 0.88em;
+}
+.paper pre {
+  direction: ltr;
+  text-align: left;
+  unicode-bidi: isolate;
+  overflow-x: auto;
+  margin-block: 1.25em;
+  padding: 1rem 1.1rem;
+  color: var(--paper-ink);
+  background: var(--paper-code-bg);
+  border-radius: var(--radius-sm);
+  line-height: 1.7;
+  font-size: 0.82em;
+}
+.paper .code-block { position: relative; }
+.paper .block { position: relative; }
+.paper .block-menu, .paper .block-menu-popover {
+  position: absolute;
+  inset-block-start: .25rem;
+  inset-inline-end: 0;
+}
+.paper .block-menu {
+  z-index: 2;
+  width: 30px;
+  height: 30px;
+  opacity: 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  color: var(--paper-dim);
+  background: transparent;
+  cursor: pointer;
+}
+.paper .block:hover .block-menu, .paper .block:focus-within .block-menu, .paper .mermaid-block:focus-within .block-menu { opacity: 1; }
+.paper .block-menu-popover {
+  z-index: 4;
+  min-width: 130px;
+  padding: .3rem;
+  border: 1px solid var(--paper-rule);
+  border-radius: var(--radius-sm);
+  color: var(--paper-ink);
+  background: var(--paper-bg);
+  box-shadow: var(--shadow-sm);
+}
+.paper .block-menu-popover button { min-height: 36px; width: 100%; border: 0; color: inherit; background: transparent; cursor: pointer; text-align: start; }
+.paper .block-menu-popover button:hover { background: var(--paper-code-bg); }
+.paper .code-block__header, .paper .nested-md figcaption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.4rem 0.75rem;
+  color: var(--paper-dim);
+  background: transparent;
+  border-block-end: 0;
+  border-radius: 0;
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+.paper .code-block pre { margin-block: 0; border-radius: var(--radius-sm); }
+.paper .code-copy, .paper .nested-md button {
+  border: 0;
+  color: var(--paper-dim);
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+}
+.paper .code-copy:hover, .paper .nested-md button:hover { color: var(--primary-strong); }
+.paper .nested-md { position: relative; margin-block: 1.5em; padding-inline-start: 1rem; border-inline-start: 1px dashed var(--paper-rule); }
+.paper .nested-md__preview { padding: 0.4rem 1rem; }
+.paper .nested-md__source { display: none; margin: 0; border-radius: 0; }
+.paper .nested-md[data-view="source"] .nested-md__preview { display: none; }
+.paper .nested-md[data-view="source"] .nested-md__source { display: block; }
+.paper .footnotes { font-size: 0.85em; color: var(--paper-dim); }
+.paper .alert { margin-block: 1.25em; padding: 0.3rem 1rem; border-inline-start: 2px solid var(--alert-color, var(--primary)); background: transparent; border-radius: 0; }
+.paper .alert__title { color: var(--alert-color, var(--primary)); font-weight: 700; }
+@media (hover: none) {
+  .paper .block-menu { opacity: .5; }
+}
+@media print {
+  .paper .block-menu, .paper .block-menu-popover, .paper .code-block__header { display: none !important; }
+}
+
+@media (max-width: 800px) {
+  .paper { padding: 1.25rem; font-size: 16px; }
+}
+
+@media print {
+  @page { size: A4; margin: 20mm; }
+  body { background: white !important; }
+  body > *:not(.print-root), .no-print { display: none !important; }
+  .paper {
+    max-width: none;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+    background: white !important;
+    color: #0b1220 !important;
+  }
+  .paper pre, .paper table tr, .paper figure, .paper blockquote { break-inside: avoid; }
+  .paper h1, .paper h2, .paper h3 { break-after: avoid; }
+}

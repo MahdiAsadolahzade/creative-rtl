@@ -1,36 +1,46 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# creative-rtl
 
-## Getting Started
+پیش‌نمایش Markdown برای متن‌های ترکیبی فارسی و انگلیسی، با تشخیص خودکار جهت هر بلوک.
 
-First, run the development server:
+## اجرا
 
 ```bash
+npm install
+cp .env.example .env.local
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+سپس `http://localhost:3000` را باز کنید. برای بررسی نهایی:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run typecheck
+npm run test
+npm run build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+برای خروجی PDF/PNG سمت سرور، Chromium را یک بار نصب کنید:
 
-## Learn More
+```bash
+npx playwright install chromium
+```
 
-To learn more about Next.js, take a look at the following resources:
+## معماری
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `/editor` ورودی را با debounce به `POST /api/render` می‌فرستد.
+- Markdown و HTML در `src/lib/markdown/pipeline.ts` با unified parse و sanitize می‌شوند.
+- منطق تشخیص جهت در `src/lib/bidi` مستقل از React است.
+- سند در `localStorage` ذخیره می‌شود و اشتراک با `deflate-raw` در hash آدرس انجام می‌شود.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+متن برای رندر به سرور ارسال می‌شود اما ذخیره یا لاگ نمی‌شود. لینک اشتراک بدون بک‌اند کار می‌کند.
 
-## Deploy on Vercel
+## خروجی PDF و PNG
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `POST /api/export` همان pipeline رندر و CSS کاغذ را در Chromium اجرا می‌کند؛ PDF و PNG با فونت‌های inline، Mermaid سمت سرور و رنگ کاغذ تولید می‌شوند.
+- موتور پیش‌فرض `playwright` است. برای محیطی که Chromium ندارد، `PDF_ENGINE=disabled` بگذارید تا API با `503` پاسخ دهد و رابط کاربری به چاپ مرورگر برگردد.
+- `PDF_NO_SANDBOX=1` فقط در کانتینرهای ایزوله استفاده شود. در محیط عادی sandbox Chromium فعال می‌ماند.
+- `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` برای تعیین مسیر Chromium سفارشی است.
+- اندازه‌ی خروجی از تنظیمات با A4 یا Letter انتخاب می‌شود. PNG با عرض ثابت و PDF با `@page` تولید می‌شود.
+- برای جلوگیری از SSRF، تصاویر خارجی فقط با HTTPS، بررسی DNS و محدودیت اندازه/redirect در خروجی inline می‌شوند؛ تصویر نامعتبر با placeholder جایگزین می‌شود.
+- محدودیت‌های حجم، خطوط، Mermaid، نرخ درخواست و هم‌زمانی روی API اعمال می‌شوند. خروجی بزرگ یا موتور غیرفعال، پیام قابل‌فهم و fallback چاپ دارد.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+در استقرار Docker/VPS، از imageای استفاده کنید که Chromium سازگار با نسخه‌ی Playwright را داشته باشد؛ اجرای موتور headless هم‌زمان برای بیش از دو درخواست در هر instance عمداً محدود شده است.

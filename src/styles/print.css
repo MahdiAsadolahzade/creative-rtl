@@ -1,0 +1,66 @@
+@page {
+  size: A4;
+  margin: 18mm 16mm 20mm;
+}
+
+@page :first {
+  margin-block-start: 14mm;
+}
+
+@media print {
+html,
+body {
+  min-width: 0;
+  margin: 0;
+  background: var(--paper-bg, #fff);
+  color: var(--paper-ink, #0b1220);
+}
+
+body {
+  font-size: 12pt;
+  line-height: 1.9;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+.paper {
+  width: auto;
+  max-width: none;
+  min-height: 0;
+  padding: 0;
+  margin: 0;
+  background: var(--paper-bg, #fff);
+  color: var(--paper-ink, #0b1220);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+.paper :where(h1, h2, h3, h4) { break-after: avoid; }
+.paper :where(figure, blockquote, .block, .block--mermaid, img, table) { break-inside: avoid; }
+.paper :where(p, li) { orphans: 3; widows: 3; }
+.paper thead { display: table-header-group; }
+.paper tr { break-inside: avoid; }
+
+.paper pre {
+  max-width: 100%;
+  overflow: visible;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.paper table {
+  width: 100%;
+  table-layout: auto;
+}
+
+.paper .table-wrap { overflow: visible; }
+.paper .mermaid-svg svg { max-width: 100%; height: auto; }
+.paper .katex-display { overflow: visible; }
+.paper .block-menu,
+.paper .block-menu-popover,
+.paper button,
+.paper .heading-anchor,
+.no-print {
+  display: none !important;
+}
+}

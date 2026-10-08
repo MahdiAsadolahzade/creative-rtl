@@ -1,0 +1,79 @@
+:root,
+[data-theme="light"] {
+  --bg: #faf9f6;
+  --surface: #ffffff;
+  --surface-2: #f1f5f9;
+  --border: #e2e8f0;
+  --border-strong: #cbd5e1;
+  --text: #0b1220;
+  --text-dim: #475569;
+  --text-faint: #64748b;
+  --primary: #6366f1;
+  --primary-strong: #4f46e5;
+  --accent: #3b82f6;
+  --lavender: #a78bfa;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --grad-brand: linear-gradient(135deg, #8b5cf6 0%, #6366f1 45%, #3b82f6 100%);
+  --ring: color-mix(in oklab, var(--primary) 45%, transparent);
+  --shadow-sm: 0 1px 2px rgb(15 23 42 / 0.04), 0 4px 12px -4px rgb(15 23 42 / 0.08);
+  --shadow-md: 0 1px 2px rgb(15 23 42 / 0.04), 0 12px 32px -12px rgb(15 23 42 / 0.16);
+  --radius-sm: 4px;
+  --radius-md: 10px;
+  --radius-lg: 10px;
+  --radius-xl: 10px;
+  --fs-body: 18px;
+  --fs-ui: 14px;
+  --fs-label: 13px;
+  --fs-small: 12px;
+  --editor-ink: #172033;
+  --editor-muted: #6b7890;
+  --editor-keyword: #6d28d9;
+  --editor-string: #047857;
+  --editor-number: #b45309;
+  --editor-comment: #64748b;
+  --editor-heading: #4338ca;
+}
+
+[data-theme="dark"] {
+  --bg: #0b1220;
+  --surface: #0f1a2e;
+  --surface-2: #16223a;
+  --border: rgb(148 163 184 / 0.14);
+  --border-strong: rgb(148 163 184 / 0.28);
+  --text: #e6eaf2;
+  --text-dim: #94a3b8;
+  --text-faint: #7c8ba3;
+  --primary: #818cf8;
+  --primary-strong: #6366f1;
+  --accent: #60a5fa;
+  --lavender: #a78bfa;
+  --success: #34d399;
+  --warning: #fbbf24;
+  --danger: #f87171;
+  --grad-brand: linear-gradient(135deg, #a78bfa 0%, #818cf8 45%, #60a5fa 100%);
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.3);
+  --shadow-md: 0 16px 40px -16px rgb(0 0 0 / 0.6);
+  --editor-ink: #e6eaf2;
+  --editor-muted: #8ea0ba;
+  --editor-keyword: #c4b5fd;
+  --editor-string: #86efac;
+  --editor-number: #fcd34d;
+  --editor-comment: #94a3b8;
+  --editor-heading: #93c5fd;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-text: var(--text);
+  --color-dim: var(--text-dim);
+  --color-primary: var(--primary);
+  --color-primary-strong: var(--primary-strong);
+  --color-accent: var(--accent);
+  --font-sans: var(--font-fa), var(--font-latin), system-ui, sans-serif;
+  --font-code: var(--font-mono), ui-monospace, monospace;
+}
