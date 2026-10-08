@@ -1,5 +1,20 @@
 import Link from "next/link";
-import { ArrowLeft, Check, ExternalLink } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowUpLeft,
+  BookOpen,
+  Check,
+  Coffee,
+  Code2,
+  ExternalLink,
+  GitBranch,
+  GitPullRequest,
+  Languages,
+  Scale,
+  ShieldCheck,
+  Sigma,
+  Workflow,
+} from "lucide-react";
 import { cacheLife } from "next/cache";
 import { Logo } from "@/components/brand/Logo";
 import { Ltr } from "@/components/ui/Ltr";
@@ -44,10 +59,11 @@ export default async function LandingPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replaceAll("<", "\\u003c") }} />
       <section className="editorial-hero">
         <div className="hero-copy">
-          <p className="section-index">۰۱ / ابزار ویراستاری برای وب</p>
-          <h1><Ltr>Markdown</Ltr> که فقط کار می‌کند — <span><bdi dir="ltr">RTL و LTR.</bdi></span></h1>
+          <p className="section-index">۰۱ / محیط خواندن برای متن‌های ترکیبی</p>
+          <h1>متن ترکیبی،<br /><span>بدون جنگ با جهت.</span></h1>
           <p className="hero-lede">رندر زیبای Markdown برای متن‌های ترکیبی فارسی و انگلیسی؛ از متن درهم‌ریخته تا خروجی مرتب، با جهت درست برای هر بلوک.</p>
-          <div className="hero-actions"><Link className="primary-cta" href="/editor">همین حالا امتحان کن <ArrowLeft size={17} /></Link><a className="secondary-cta" href={siteConfig.repoUrl} target="_blank" rel="noreferrer">مشاهده در GitHub</a></div>
+          <div className="hero-actions"><Link className="primary-cta" href="/editor">باز کردن ادیتور <ArrowUpLeft size={17} /></Link><a className="secondary-cta" href={siteConfig.repoUrl} target="_blank" rel="noreferrer"><GitBranch size={16} /> سورس در GitHub</a></div>
+          <div className="hero-proof"><span><ShieldCheck size={14} /> بدون ذخیره‌سازی متن</span><span><Scale size={14} /> MIT License</span><span><Code2 size={14} /> Open source</span></div>
           <p className="privacy-note"><Check size={16} /> متن شما ذخیره یا لاگ نمی‌شود؛ فقط برای رندر به سرور می‌رود.</p>
         </div>
         <ComparisonDemo rendered={renderedDemo} />
@@ -56,10 +72,10 @@ export default async function LandingPage() {
       <section className="editorial-features" id="features">
         <div className="editorial-section-label"><span>۰۲</span><p>چرا creative-rtl</p></div>
         <div className="feature-grid">
-          <EditorialFeature number="۰۱" title="تشخیص خودکار RTL/LTR" text="هر پاراگراف، تیتر، آیتم و سلول جدول مسیر خودش را پیدا می‌کند." />
-          <EditorialFeature number="۰۲" title="زبان‌های ترکیبی" text="فارسی، عربی، انگلیسی و کد کنار هم، بدون جابه‌جایی علائم." />
-          <EditorialFeature number="۰۳" title="Mermaid و فرمول" text="نمودار و ریاضی، با خروجی خوانا و خطای مستقل." />
-          <EditorialFeature number="۰۴" title="رایگان و متن‌باز" text="متن برای رندر ارسال می‌شود؛ ذخیره و لاگ نمی‌شود." />
+          <EditorialFeature number="۰۱" icon={<Languages size={17} />} title="تشخیص خودکار RTL/LTR" text="هر پاراگراف، تیتر، آیتم و سلول جدول مسیر خودش را پیدا می‌کند." />
+          <EditorialFeature number="۰۲" icon={<Workflow size={17} />} title="زبان‌های ترکیبی" text="فارسی، عربی، انگلیسی و کد کنار هم، بدون جابه‌جایی علائم." />
+          <EditorialFeature number="۰۳" icon={<Sigma size={17} />} title="Mermaid و فرمول" text="نمودار و ریاضی، با خروجی خوانا و خطای مستقل." />
+          <EditorialFeature number="۰۴" icon={<BookOpen size={17} />} title="رایگان و متن‌باز" text="متن برای رندر ارسال می‌شود؛ ذخیره و لاگ نمی‌شود." />
         </div>
       </section>
 
@@ -75,6 +91,10 @@ export default async function LandingPage() {
       </section>
 
       <section className="faq-section editorial-faq" id="faq"><div className="editorial-section-label"><span>۰۵</span><p>پرسش‌های متداول</p></div><div className="faq-list">{faq.map((item) => <details key={item.question}><summary>{item.question}<span>+</span></summary><p>{item.answer}</p></details>)}</div></section>
+      <section className="support-section" id="support">
+        <div className="support-copy"><p className="section-index">۰۶ / اگر مفید بود</p><h2>یک قهوه، برای ادامه‌ی متن‌باز.</h2><p>creative-rtl رایگان و MIT است. اگر در کارتان مفید بود، با یک قهوه از توسعه‌اش حمایت کنید.</p></div>
+        <div className="support-actions"><a className="support-cta" href={siteConfig.supportUrl} target="_blank" rel="noreferrer"><Coffee size={18} /> یک قهوه مهمان کن <ArrowUpLeft size={15} /></a><a className="support-link" href={siteConfig.contributeUrl} target="_blank" rel="noreferrer"><GitPullRequest size={16} /> پیشنهاد تغییر در GitHub</a></div>
+      </section>
       <section className="editorial-cta"><div><p className="section-index">همان متن. جهت درست.</p><h2>برای متن بعدی آماده‌ای؟</h2></div><Link className="primary-cta" href="/editor">شروع رایگان <ExternalLink size={16} /></Link></section>
     </main>
   );
@@ -84,8 +104,8 @@ function ComparisonDemo({ rendered }: { rendered: string }) {
   return <div className="comparison-demo"><div className="comparison-heading"><span>یک متن، دو نتیجه</span><span className="comparison-note">مقایسه‌ی واقعی</span></div><div className="comparison-columns"><div className="comparison-column comparison-column--naive"><h3>مرورگر معمولی</h3><p>جهت پیش‌فرض صفحه روی همه‌چیز اثر می‌گذارد.</p><div className="naive-result">English with test a is This<br />نسخه‌ی 02 Node.js<br />z = y + x</div></div><div className="comparison-column comparison-column--correct"><h3><Ltr>creative-rtl</Ltr></h3><p>هر بلوک و هر Run جهت صریح دارد.</p><div className="correct-result" dangerouslySetInnerHTML={{ __html: rendered }} /></div></div><Link className="comparison-link" href="/editor">همین متن را در ادیتور باز کن <ArrowLeft size={15} /></Link></div>;
 }
 
-function EditorialFeature({ number, title, text }: { number: string; title: string; text: string }) {
-  return <article className="editorial-feature"><span className="feature-number">{number}</span><h3>{title}</h3><p>{text}</p></article>;
+function EditorialFeature({ number, icon, title, text }: { number: string; icon: React.ReactNode; title: string; text: string }) {
+  return <article className="editorial-feature"><div className="feature-topline"><span className="feature-number">{number}</span><span className="feature-icon">{icon}</span></div><h3>{title}</h3><p>{text}</p></article>;
 }
 
 function FlowItem({ number, title, text }: { number: string; title: string; text: string }) {

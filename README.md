@@ -44,3 +44,14 @@ npx playwright install chromium
 - محدودیت‌های حجم، خطوط، Mermaid، نرخ درخواست و هم‌زمانی روی API اعمال می‌شوند. خروجی بزرگ یا موتور غیرفعال، پیام قابل‌فهم و fallback چاپ دارد.
 
 در استقرار Docker/VPS، از imageای استفاده کنید که Chromium سازگار با نسخه‌ی Playwright را داشته باشد؛ اجرای موتور headless هم‌زمان برای بیش از دو درخواست در هر instance عمداً محدود شده است.
+
+## استقرار روی Vercel
+
+1. مخزن [`MahdiAsadolahzade/creative-rtl`](https://github.com/MahdiAsadolahzade/creative-rtl) را در Vercel import کنید.
+2. مقدار `NEXT_PUBLIC_SITE_URL` را روی دامنه‌ی نهایی قرار دهید.
+3. مقدار `NEXT_PUBLIC_SUPPORT_URL` را روی لینک واقعی حمایت مالی خودتان قرار دهید.
+4. برای استقرار پیش‌فرض Vercel، `PDF_ENGINE=disabled` بگذارید؛ رابط کاربری به fallback چاپ مرورگر برمی‌گردد. برای PDF سمت‌سرور باید یک موتور Chromium serverless جداگانه اضافه شود.
+
+## مشارکت
+
+پروژه با مجوز MIT منتشر شده است. برای پیشنهاد قابلیت یا ارسال اصلاح، یک issue یا pull request در [GitHub](https://github.com/MahdiAsadolahzade/creative-rtl) باز کنید.
