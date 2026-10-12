@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { renderDocument } from "@/lib/markdown/pipeline";
 
@@ -50,5 +51,69 @@ describe("markdown pipeline polish regressions", () => {
     expect(html).toContain("<audio controls>");
     expect(html).not.toContain("alert");
     expect(html).not.toContain("url(");
+  });
+
+  it("wraps tables for horizontal scrolling and keeps GFM column alignment", async () => {
+    const result = await renderDocument({
+      source: "| نام | مقدار |\n| :--- | :---: |\n| علی | ۲۰ |",
+      mode: "markdown",
+      dir: "auto",
+    });
+    const html = result.blocks.map((block) => block.html).join("");
+    expect(html).toContain('<div class="table-wrap" dir="rtl"><table');
+    expect(html).toContain('align="center"');
+    expect(result.blocks[0]?.line).toBe(1);
+  });
+
+  it("reports math and nested markdown features from the rendered tree", async () => {
+    const math = await renderDocument({ source: "$$x^2$$", mode: "markdown", dir: "auto" });
+    expect(math.meta.features.math).toBe(true);
+    const nested = await renderDocument({ source: "```markdown\n# hi\n```", mode: "markdown", dir: "auto" });
+    expect(nested.meta.features.nestedMarkdown).toBe(true);
+  });
+
+  it("turns ==text== into mark but leaves inline code alone", async () => {
+    const result = await renderDocument({
+      source: "این ==مهم== است و `==کد==` نیست. English ==mark== here",
+      mode: "markdown",
+      dir: "auto",
+    });
+    const html = result.blocks.map((block) => block.html).join("");
+    expect(html).toContain("<mark>مهم</mark>");
+    expect(html).toContain('<mark><bdi dir="ltr">mark</bdi></mark>');
+    expect(html).toContain('<code dir="ltr">==کد==</code>');
+  });
+
+  it("keeps footnote ids and hrefs prefixed once and uses Persian labels", async () => {
+    const result = await renderDocument({
+      source: "متن[^1]\n\n[^1]: یادداشت",
+      mode: "markdown",
+      dir: "auto",
+    });
+    const html = result.blocks.map((block) => block.html).join("");
+    expect(html).toContain('href="#user-content-fn-1"');
+    expect(html).toContain('id="user-content-fn-1"');
+    expect(html).not.toContain("user-content-user-content");
+    expect(html).toContain("پانویس‌ها");
+  });
+
+  it("renders the table fixture as a wrapped table", async () => {
+    const result = await renderDocument({
+      source: readFileSync("tests/fixtures/tables-mixed.md", "utf8"),
+      mode: "markdown",
+      dir: "auto",
+    });
+    const html = result.blocks.map((block) => block.html).join("");
+    expect(html.match(/<table/g)).toHaveLength(1);
+    expect(html).toContain('class="table-wrap"');
+    expect(result.meta.warnings).toEqual([]);
+  });
+
+  it("warns when a Markdown table is pasted into HTML mode", async () => {
+    const source = "| a | b |\n| --- | --- |\n| 1 | 2 |";
+    const html = await renderDocument({ source, mode: "html", dir: "auto" });
+    expect(html.meta.warnings).toEqual(["markdown-in-html"]);
+    const markdown = await renderDocument({ source, mode: "markdown", dir: "auto" });
+    expect(markdown.meta.warnings).toEqual([]);
   });
 });

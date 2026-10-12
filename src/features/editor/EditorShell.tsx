@@ -43,6 +43,10 @@ flowchart LR
 type Paper = "white" | "warm" | "dark";
 type MobileTab = "input" | "preview";
 type SoftBreaks = "markdown" | "preserve";
+
+const renderWarnings: Record<string, string> = {
+  "markdown-in-html": "این متن جدول Markdown دارد اما حالت HTML انتخاب شده است. برای نمایش جدول، حالت Markdown را انتخاب کنید.",
+};
 type NestedMode = "preview" | "source";
 
 export function EditorShell() {
@@ -375,6 +379,7 @@ export function EditorShell() {
           <div className="panel-heading"><div><span>پیش‌نمایش</span></div><DirectionChip meta={rendered?.meta.direction ?? localMeta} mode={dirMode} compact /></div>
           <div ref={previewRef} className="preview-scroll">
             {error && <div className="render-error" role="status">{error}</div>}
+            {rendered?.meta.warnings.map((code) => <div key={code} className="render-warning" role="note">{renderWarnings[code] ?? code}</div>)}
             <article className="paper print-root" data-paper={paper}>
               {rendered?.blocks.map((block) => block.kind === "mermaid" && block.mermaid
                 ? <MermaidBlock key={block.id} id={block.id} source={block.mermaid.source} fallback={block.html} />

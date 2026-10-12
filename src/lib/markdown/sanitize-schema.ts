@@ -3,6 +3,8 @@ import type { Schema } from "hast-util-sanitize";
 
 export const sanitizeSchema: Schema = {
   ...defaultSchema,
+  // remark-rehype already prefixes footnote ids and hrefs; without this, sanitize prefixes them a second time.
+  clobber: [],
   tagNames: [
     ...(defaultSchema.tagNames ?? []),
     "details", "summary", "kbd", "sub", "sup", "mark", "bdi", "figure", "figcaption",

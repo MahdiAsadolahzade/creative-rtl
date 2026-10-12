@@ -25,6 +25,8 @@ import { rehypeBidi } from "./plugins/rehypeBidi";
 import { rehypeMathIsolate } from "./plugins/rehypeMathIsolate";
 import { rehypeRestrictUrls } from "./plugins/rehypeRestrictUrls";
 import { rehypeRestrictStyles } from "./plugins/rehypeRestrictStyles";
+import { rehypeTableWrap } from "./plugins/rehypeTableWrap";
+import { remarkMark } from "./plugins/remarkMark";
 import { rehypeBlockChrome } from "./plugins/rehypeBlockChrome";
 import type { RenderBlock, RenderOptions, RenderResponse } from "./types";
 
@@ -146,6 +148,14 @@ async function decorateNestedMarkdown(html: string, options: RenderOptions): Pro
   return `<figure class="nested-md" data-view="preview"><figcaption><span>Markdown</span><span><button type="button" data-action="nested-toggle">کد / پیش‌نمایش</button><button type="button" data-action="copy-code">کپی</button></span></figcaption><div class="nested-md__preview">${preview}</div>${source}</figure>`;
 }
 
+const markdownTableDelimiter = /^\s*\|?\s*:?-{3,}:?\s*(?:\|\s*:?-{3,}:?\s*)+\|?\s*$/mu;
+
+// Tables written in HTML mode are plain text, so tell the user instead of showing them unformatted.
+function warningsFor(options: RenderOptions, source: string): string[] {
+  if (options.mode === "html" && markdownTableDelimiter.test(source)) return ["markdown-in-html"];
+  return [];
+}
+
 function renderAlertHtml(html: string): string {
   const labels: Record<string, string> = { NOTE: "نکته", TIP: "توصیه", IMPORTANT: "مهم", WARNING: "هشدار", CAUTION: "احتیاط" };
   return html.replace(/<blockquote>\s*<p>\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]\s*([\s\S]*?)<\/p>\s*<\/blockquote>/g, (_m, key: string, body: string) =>
@@ -157,9 +167,9 @@ async function renderUncached(options: RenderOptions): Promise<RenderResponse> {
   const source = options.mode === "markdown" ? normalizeMarkdown(options.source) : options.source;
   const processor = unified();
   if (options.mode === "markdown") {
-    processor.use(remarkParse).use(remarkGfm).use(remarkMath);
+    processor.use(remarkParse).use(remarkGfm).use(remarkMath).use(remarkMark);
     if (options.softBreaks === "preserve") processor.use(remarkBreaks);
-    processor.use(remarkRehype, { allowDangerousHtml: true });
+    processor.use(remarkRehype, { allowDangerousHtml: true, footnoteLabel: "پانویس‌ها", footnoteBackLabel: "بازگشت به متن" });
   } else {
     processor.use(rehypeParse, { fragment: true });
   }
@@ -170,6 +180,7 @@ async function renderUncached(options: RenderOptions): Promise<RenderResponse> {
     .use(rehypeRestrictStyles)
     .use(rehypeSlug)
     .use(rehypeBidi, { dir: options.dir })
+    .use(rehypeTableWrap)
     .use(rehypeKatex)
     .use(rehypeMathIsolate)
     .use(rehypeShiki, {
@@ -199,11 +210,11 @@ async function renderUncached(options: RenderOptions): Promise<RenderResponse> {
       headings: processed.headings,
       features: {
         mermaid: blocks.some((block) => block.kind === "mermaid"),
-        math: hasClassOrTag(tree, new Set(["math", "katex", "math-inline", "math-display"])),
+        math: tree.children.some((child) => hasClassOrTag(child, new Set(["math", "katex", "math-inline", "math-display"]))),
         code: blocks.some((block) => block.html.includes("block--code") || block.html.includes("code-block")),
-        nestedMarkdown: hasClassOrTag(tree, new Set(["language-markdown", "language-md", "language-mdx"])),
+        nestedMarkdown: tree.children.some((child) => hasClassOrTag(child, new Set(["language-markdown", "language-md", "language-mdx"]))),
       },
-      warnings: [],
+      warnings: warningsFor(options, source),
     },
   };
 }

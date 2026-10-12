@@ -60,7 +60,9 @@
 .paper input[type="checkbox"] { accent-color: var(--primary); margin-inline-end: 0.45em; }
 .paper .table-wrap { max-width: 100%; overflow-x: auto; margin-block: 1.5em; }
 .paper table { width: 100%; border-collapse: collapse; font-size: 0.92em; }
-.paper th, .paper td { border-block-end: 1px solid var(--paper-rule); padding: 0.55em 0.7em; text-align: start; vertical-align: top; }
+.paper th, .paper td { border-block-end: 1px solid var(--paper-rule); padding: 0.55em 0.7em; min-width: 6em; vertical-align: top; }
+/* Only cells without an explicit GFM alignment (:---, :---:, ---:) get the start default, so align="…" keeps working. */
+.paper :where(th, td):not([align]) { text-align: start; }
 .paper th { background: transparent; font-weight: 700; }
 .paper :where(code, pre) { font-family: var(--font-mono), ui-monospace, monospace; }
 .paper :where(.katex, .katex-display) { direction: ltr; unicode-bidi: isolate; }
@@ -147,7 +149,9 @@
 .paper .nested-md[data-view="source"] .nested-md__preview { display: none; }
 .paper .nested-md[data-view="source"] .nested-md__source { display: block; }
 .paper .footnotes { font-size: 0.85em; color: var(--paper-dim); }
-.paper .alert { margin-block: 1.25em; padding: 0.3rem 1rem; border-inline-start: 2px solid var(--alert-color, var(--primary)); background: transparent; border-radius: 0; }
+.paper mark { color: inherit; padding: 0 0.2em; border-radius: 4px; background: #fef08a; }
+.paper[data-paper="dark"] mark { color: #fef9c3; background: #713f12; }
+.paper .alert {margin-block: 1.25em; padding: 0.3rem 1rem; border-inline-start: 2px solid var(--alert-color, var(--primary)); background: transparent; border-radius: 0; }
 .paper .alert__title { color: var(--alert-color, var(--primary)); font-weight: 700; }
 @media (hover: none) {
   .paper .block-menu { opacity: .5; }
