@@ -7,15 +7,18 @@ import { defaultKeymap, history, historyKeymap, indentWithTab } from "@codemirro
 import { syntaxHighlighting } from "@codemirror/language";
 import { markdown } from "@codemirror/lang-markdown";
 import { classHighlighter } from "@lezer/highlight";
+import { formatKeymap } from "./format";
 
 type CodeMirrorEditorProps = {
   value: string;
   onChange: (value: string) => void;
   theme: "dark" | "light";
   ariaLabel?: string;
+  // Lets the formatting toolbar reach the live editor view.
+  viewRef?: { current: EditorView | null };
 };
 
-export function CodeMirrorEditor({ value, onChange, theme, ariaLabel = "متن Markdown" }: CodeMirrorEditorProps) {
+export function CodeMirrorEditor({ value, onChange, theme, ariaLabel = "متن Markdown", viewRef: externalViewRef }: CodeMirrorEditorProps) {
   const hostRef = useRef<HTMLDivElement>(null);
   const viewRef = useRef<EditorView | null>(null);
   const onChangeRef = useRef(onChange);
@@ -32,6 +35,7 @@ export function CodeMirrorEditor({ value, onChange, theme, ariaLabel = "متن M
         highlightActiveLine(),
         highlightSpecialChars(),
         syntaxHighlighting(classHighlighter),
+        formatKeymap,
         keymap.of([...defaultKeymap, ...historyKeymap, indentWithTab]),
         markdown(),
         EditorView.lineWrapping,
@@ -54,10 +58,13 @@ export function CodeMirrorEditor({ value, onChange, theme, ariaLabel = "متن M
     const view = new EditorView({ state: startState, parent: hostRef.current });
     view.dom.setAttribute("aria-label", ariaLabel);
     viewRef.current = view;
+    if (externalViewRef) externalViewRef.current = view;
     return () => {
       view.destroy();
       viewRef.current = null;
+      if (externalViewRef) externalViewRef.current = null;
     };
+    // externalViewRef is a stable ref object owned by the parent, so it is not a dependency.
   }, [ariaLabel]);
 
   useEffect(() => {

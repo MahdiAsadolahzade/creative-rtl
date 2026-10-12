@@ -14,6 +14,8 @@ import { decodeShare, encodeShare } from "@/features/share/encode";
 import { MermaidBlock } from "@/features/preview/MermaidBlock";
 import { ExportActions } from "@/features/export/ExportActions";
 import { InputActions } from "@/features/export/InputActions";
+import { FormatToolbar } from "./FormatToolbar";
+import type { EditorView } from "@codemirror/view";
 
 const CodeMirrorEditor = dynamic(
   () => import("./CodeMirrorEditor").then((module) => module.CodeMirrorEditor),
@@ -68,6 +70,7 @@ export function EditorShell() {
   const requestId = useRef(0);
   const previewRef = useRef<HTMLDivElement>(null);
   const workspaceRef = useRef<HTMLElement>(null);
+  const editorViewRef = useRef<EditorView | null>(null);
   const dividerDragged = useRef(false);
 
   const localMeta = useMemo(() => documentDirection(source, dirMode), [source, dirMode]);
@@ -326,7 +329,8 @@ export function EditorShell() {
       <section ref={workspaceRef} className="editor-workspace" style={{ "--panel-split": `${split}%` } as React.CSSProperties}>
         <div className={`editor-panel input-panel ${mobileTab === "input" ? "mobile-visible" : ""}`}>
           <div className="panel-heading"><div><span>ورودی</span></div><div className="panel-heading-actions"><span className="char-count num">{new Intl.NumberFormat("fa-IR").format(source.length)} نویسه</span><InputActions source={source} onMessage={notify} /></div></div>
-          <CodeMirrorEditor value={source} onChange={setSource} theme={theme} />
+          <FormatToolbar viewRef={editorViewRef} />
+          <CodeMirrorEditor value={source} onChange={setSource} theme={theme} viewRef={editorViewRef} />
           <footer className="panel-footer"><DirectionChip meta={localMeta} mode={dirMode} /><span>{rendering ? "در حال رندر…" : mode === "markdown" ? "Markdown" : "HTML"}</span></footer>
         </div>
         <Popover.Root open={dividerOpen} onOpenChange={setDividerOpen}>
